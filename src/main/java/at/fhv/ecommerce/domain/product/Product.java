@@ -1,6 +1,8 @@
 package at.fhv.ecommerce.domain.product;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Product {
@@ -9,10 +11,13 @@ public class Product {
     @GeneratedValue
     private Long id;
 
+    @NotBlank
     private String name;
 
+    @Min(0)
     private double price;
 
+    @Min(0)
     private int stock;
 
     public Product() {}

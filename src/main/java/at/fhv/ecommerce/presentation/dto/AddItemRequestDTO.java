@@ -1,8 +1,14 @@
 package at.fhv.ecommerce.presentation.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 public class AddItemRequestDTO {
 
+    @NotNull
     private Long productId;
+
+    @Min(1)
     private int quantity;
 
     public Long getProductId() {

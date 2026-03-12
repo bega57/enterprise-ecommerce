@@ -3,6 +3,7 @@ package at.fhv.ecommerce.presentation.rest;
 import at.fhv.ecommerce.application.cart.CartService;
 import at.fhv.ecommerce.presentation.dto.AddItemRequestDTO;
 import at.fhv.ecommerce.domain.cart.Cart;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,7 +23,7 @@ public class CartController {
 
     @PostMapping("/{userId}/items")
     public Cart addItem(@PathVariable Long userId,
-                        @RequestBody AddItemRequestDTO request){
+                        @Valid @RequestBody AddItemRequestDTO request){
         return service.addProduct(
                 userId,
                 request.getProductId(),

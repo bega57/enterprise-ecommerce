@@ -2,6 +2,7 @@ package at.fhv.ecommerce.domain.cart;
 
 import at.fhv.ecommerce.domain.product.Product;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 
 @Entity
 public class CartItem {
@@ -13,6 +14,7 @@ public class CartItem {
     @ManyToOne
     private Product product;
 
+    @Min(1)
     private int quantity;
 
     public CartItem(){}

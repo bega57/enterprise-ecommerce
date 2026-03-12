@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Min;
 
 @Entity
 public class OrderItem {
@@ -16,6 +17,7 @@ public class OrderItem {
     @ManyToOne
     private Product product;
 
+    @Min(1)
     private int quantity;
 
     public Long getId() {
