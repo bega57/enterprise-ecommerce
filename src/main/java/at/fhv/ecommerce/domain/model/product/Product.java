@@ -1,4 +1,4 @@
-package at.fhv.ecommerce.domain.product;
+package at.fhv.ecommerce.domain.model.product;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;

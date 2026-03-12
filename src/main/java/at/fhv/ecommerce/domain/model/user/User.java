@@ -1,4 +1,4 @@
-package at.fhv.ecommerce.domain.user;
+package at.fhv.ecommerce.domain.model.user;
 
 import jakarta.persistence.*;
 

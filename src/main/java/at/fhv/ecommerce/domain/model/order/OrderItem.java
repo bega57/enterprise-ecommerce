@@ -1,6 +1,6 @@
-package at.fhv.ecommerce.domain.order;
+package at.fhv.ecommerce.domain.model.order;
 
-import at.fhv.ecommerce.domain.product.Product;
+import at.fhv.ecommerce.domain.model.product.Product;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;

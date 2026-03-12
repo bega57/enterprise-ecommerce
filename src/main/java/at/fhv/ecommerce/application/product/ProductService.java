@@ -1,7 +1,7 @@
 package at.fhv.ecommerce.application.product;
 
-import at.fhv.ecommerce.domain.product.Product;
-import at.fhv.ecommerce.infrastructure.product.ProductRepository;
+import at.fhv.ecommerce.domain.model.product.Product;
+import at.fhv.ecommerce.infrastructure.persistence.product.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

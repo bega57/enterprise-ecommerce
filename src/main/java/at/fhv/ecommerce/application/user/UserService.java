@@ -1,7 +1,7 @@
 package at.fhv.ecommerce.application.user;
 
-import at.fhv.ecommerce.domain.user.User;
-import at.fhv.ecommerce.infrastructure.user.UserRepository;
+import at.fhv.ecommerce.domain.model.user.User;
+import at.fhv.ecommerce.infrastructure.persistence.user.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

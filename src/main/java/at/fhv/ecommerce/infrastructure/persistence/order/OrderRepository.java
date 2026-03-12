@@ -1,6 +1,6 @@
-package at.fhv.ecommerce.infrastructure.order;
+package at.fhv.ecommerce.infrastructure.persistence.order;
 
-import at.fhv.ecommerce.domain.order.Order;
+import at.fhv.ecommerce.domain.model.order.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

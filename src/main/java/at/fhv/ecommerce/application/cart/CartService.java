@@ -1,13 +1,13 @@
 package at.fhv.ecommerce.application.cart;
 
-import at.fhv.ecommerce.domain.cart.Cart;
-import at.fhv.ecommerce.domain.cart.CartItem;
-import at.fhv.ecommerce.domain.product.Product;
-import at.fhv.ecommerce.domain.user.User;
-import at.fhv.ecommerce.infrastructure.cart.CartRepository;
-import at.fhv.ecommerce.infrastructure.product.ProductRepository;
+import at.fhv.ecommerce.domain.model.cart.Cart;
+import at.fhv.ecommerce.domain.model.cart.CartItem;
+import at.fhv.ecommerce.domain.model.product.Product;
+import at.fhv.ecommerce.domain.model.user.User;
+import at.fhv.ecommerce.infrastructure.persistence.cart.CartRepository;
+import at.fhv.ecommerce.infrastructure.persistence.product.ProductRepository;
 import org.springframework.stereotype.Service;
-import at.fhv.ecommerce.infrastructure.user.UserRepository;
+import at.fhv.ecommerce.infrastructure.persistence.user.UserRepository;
 
 @Service
 public class CartService {

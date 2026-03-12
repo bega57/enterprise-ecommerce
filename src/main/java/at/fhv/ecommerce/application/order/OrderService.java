@@ -1,13 +1,13 @@
 package at.fhv.ecommerce.application.order;
 
-import at.fhv.ecommerce.domain.cart.Cart;
-import at.fhv.ecommerce.domain.cart.CartItem;
-import at.fhv.ecommerce.domain.order.Order;
-import at.fhv.ecommerce.domain.order.OrderItem;
-import at.fhv.ecommerce.domain.product.Product;
-import at.fhv.ecommerce.infrastructure.cart.CartRepository;
-import at.fhv.ecommerce.infrastructure.order.OrderRepository;
-import at.fhv.ecommerce.infrastructure.product.ProductRepository;
+import at.fhv.ecommerce.domain.model.cart.Cart;
+import at.fhv.ecommerce.domain.model.cart.CartItem;
+import at.fhv.ecommerce.domain.model.order.Order;
+import at.fhv.ecommerce.domain.model.order.OrderItem;
+import at.fhv.ecommerce.domain.model.product.Product;
+import at.fhv.ecommerce.infrastructure.persistence.cart.CartRepository;
+import at.fhv.ecommerce.infrastructure.persistence.order.OrderRepository;
+import at.fhv.ecommerce.infrastructure.persistence.product.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

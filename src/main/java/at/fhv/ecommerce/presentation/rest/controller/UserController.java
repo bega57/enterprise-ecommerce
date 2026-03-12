@@ -1,7 +1,7 @@
-package at.fhv.ecommerce.presentation.rest;
+package at.fhv.ecommerce.presentation.rest.controller;
 
 import at.fhv.ecommerce.application.user.UserService;
-import at.fhv.ecommerce.domain.user.User;
+import at.fhv.ecommerce.domain.model.user.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

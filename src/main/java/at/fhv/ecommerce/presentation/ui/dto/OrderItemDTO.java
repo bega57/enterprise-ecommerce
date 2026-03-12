@@ -1,18 +1,17 @@
-package at.fhv.ecommerce.presentation.dto;
+package at.fhv.ecommerce.presentation.ui.dto;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+public class OrderItemDTO {
 
-public class AddItemRequestDTO {
-
-    @NotNull
     private Long productId;
-
-    @Min(1)
+    private String productName;
     private int quantity;
 
     public Long getProductId() {
         return productId;
+    }
+
+    public String getProductName() {
+        return productName;
     }
 
     public int getQuantity() {
@@ -21,6 +20,10 @@ public class AddItemRequestDTO {
 
     public void setProductId(Long productId) {
         this.productId = productId;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public void setQuantity(int quantity) {

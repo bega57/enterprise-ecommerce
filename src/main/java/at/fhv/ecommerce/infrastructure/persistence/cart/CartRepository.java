@@ -1,6 +1,6 @@
-package at.fhv.ecommerce.infrastructure.cart;
+package at.fhv.ecommerce.infrastructure.persistence.cart;
 
-import at.fhv.ecommerce.domain.cart.Cart;
+import at.fhv.ecommerce.domain.model.cart.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

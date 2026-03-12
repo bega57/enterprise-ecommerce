@@ -1,6 +1,6 @@
-package at.fhv.ecommerce.domain.cart;
+package at.fhv.ecommerce.domain.model.cart;
 
-import at.fhv.ecommerce.domain.user.User;
+import at.fhv.ecommerce.domain.model.user.User;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

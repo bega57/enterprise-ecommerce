@@ -1,6 +1,6 @@
-package at.fhv.ecommerce.domain.cart;
+package at.fhv.ecommerce.domain.model.cart;
 
-import at.fhv.ecommerce.domain.product.Product;
+import at.fhv.ecommerce.domain.model.product.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 

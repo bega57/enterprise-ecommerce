@@ -1,8 +1,8 @@
-package at.fhv.ecommerce.presentation.rest;
+package at.fhv.ecommerce.presentation.rest.controller;
 
 import at.fhv.ecommerce.application.cart.CartService;
-import at.fhv.ecommerce.presentation.dto.AddItemRequestDTO;
-import at.fhv.ecommerce.domain.cart.Cart;
+import at.fhv.ecommerce.presentation.ui.dto.AddItemRequestDTO;
+import at.fhv.ecommerce.domain.model.cart.Cart;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
