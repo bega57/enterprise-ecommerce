@@ -1,10 +1,9 @@
 package at.fhv.ecommerce.presentation.rest.controller;
 
-import at.fhv.ecommerce.application.user.UserService;
-import at.fhv.ecommerce.domain.model.user.User;
+import at.fhv.ecommerce.application.service.UserService;
+import at.fhv.ecommerce.presentation.ui.dto.UserDTO;
+import at.fhv.ecommerce.presentation.ui.dto.UserRequestDTO;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -12,32 +11,33 @@ public class UserController {
 
     private final UserService service;
 
-    public UserController(UserService service){
+    public UserController(UserService service) {
         this.service = service;
     }
 
     @GetMapping
-    public List<User> getUsers(){
+    public UserDTO[] getUsers() {
         return service.getUsers();
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable Long id){
+    public UserDTO getUser(@PathVariable Long id) {
         return service.getUser(id);
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user){
-        return service.createUser(user);
+    public UserDTO createUser(@RequestBody UserRequestDTO dto) {
+        return service.createUser(dto);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user){
-        return service.updateUser(id, user);
+    public UserDTO updateUser(@PathVariable Long id,
+                              @RequestBody UserRequestDTO dto) {
+        return service.updateUser(id, dto);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id){
+    public void deleteUser(@PathVariable Long id) {
         service.deleteUser(id);
     }
 }

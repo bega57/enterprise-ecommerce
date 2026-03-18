@@ -1,9 +1,8 @@
 package at.fhv.ecommerce.presentation.rest.controller;
 
-import at.fhv.ecommerce.application.cart.CartService;
+import at.fhv.ecommerce.application.service.CartService;
 import at.fhv.ecommerce.presentation.ui.dto.AddItemRequestDTO;
-import at.fhv.ecommerce.domain.model.cart.Cart;
-import jakarta.validation.Valid;
+import at.fhv.ecommerce.presentation.ui.dto.CartDTO;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,28 +11,24 @@ public class CartController {
 
     private final CartService service;
 
-    public CartController(CartService service){
+    public CartController(CartService service) {
         this.service = service;
     }
 
     @GetMapping("/{userId}")
-    public Cart getCart(@PathVariable Long userId){
-        return service.getCartByUser(userId);
+    public CartDTO getCart(@PathVariable Long userId) {
+        return service.getCart(userId);
     }
 
     @PostMapping("/{userId}/items")
-    public Cart addItem(@PathVariable Long userId,
-                        @Valid @RequestBody AddItemRequestDTO request){
-        return service.addProduct(
-                userId,
-                request.getProductId(),
-                request.getQuantity()
-        );
+    public CartDTO addItem(@PathVariable Long userId,
+                           @RequestBody AddItemRequestDTO request) {
+        return service.addItem(userId, request);
     }
 
     @DeleteMapping("/{cartId}/items/{productId}")
-    public Cart removeItem(@PathVariable Long cartId,
-                           @PathVariable Long productId){
-        return service.removeProduct(cartId, productId);
+    public void removeItem(@PathVariable Long cartId,
+                           @PathVariable Long productId) {
+        service.removeItem(cartId, productId);
     }
 }

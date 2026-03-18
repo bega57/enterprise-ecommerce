@@ -1,12 +1,8 @@
 package at.fhv.ecommerce.presentation.rest.controller;
 
-import at.fhv.ecommerce.application.order.OrderService;
-import at.fhv.ecommerce.presentation.ui.dto.OrderResponseDTO;
-import at.fhv.ecommerce.presentation.ui.mapper.OrderMapper;
+import at.fhv.ecommerce.application.service.OrderService;
+import at.fhv.ecommerce.presentation.ui.dto.OrderDTO;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/orders")
@@ -19,21 +15,17 @@ public class OrderController {
     }
 
     @PostMapping("/{userId}")
-    public OrderResponseDTO placeOrder(@PathVariable Long userId) {
-        return OrderMapper.toDTO(service.placeOrder(userId));
+    public OrderDTO placeOrder(@PathVariable Long userId) {
+        return service.placeOrder(userId);
     }
 
     @GetMapping("/user/{userId}")
-    public List<OrderResponseDTO> getOrdersByUser(@PathVariable Long userId) {
-
-        return service.getOrdersByUser(userId)
-                .stream()
-                .map(OrderMapper::toDTO)
-                .collect(Collectors.toList());
+    public OrderDTO[] getOrdersByUser(@PathVariable Long userId) {
+        return service.getOrdersByUser(userId);
     }
 
     @GetMapping("/{orderId}")
-    public OrderResponseDTO getOrder(@PathVariable Long orderId) {
-        return OrderMapper.toDTO(service.getOrder(orderId));
+    public OrderDTO getOrder(@PathVariable Long orderId) {
+        return service.getOrder(orderId);
     }
 }
