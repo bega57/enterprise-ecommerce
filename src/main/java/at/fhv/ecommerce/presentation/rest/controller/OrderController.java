@@ -1,7 +1,7 @@
 package at.fhv.ecommerce.presentation.rest.controller;
 
 import at.fhv.ecommerce.application.service.OrderService;
-import at.fhv.ecommerce.presentation.ui.dto.OrderDTO;
+import at.fhv.ecommerce.presentation.ui.dto.OrderResponseDTO;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,17 +15,17 @@ public class OrderController {
     }
 
     @PostMapping("/{userId}")
-    public OrderDTO placeOrder(@PathVariable Long userId) {
+    public OrderResponseDTO placeOrder(@PathVariable Long userId) {
         return service.placeOrder(userId);
     }
 
     @GetMapping("/user/{userId}")
-    public OrderDTO[] getOrdersByUser(@PathVariable Long userId) {
+    public OrderResponseDTO[] getOrdersByUser(@PathVariable Long userId) {
         return service.getOrdersByUser(userId);
     }
 
     @GetMapping("/{orderId}")
-    public OrderDTO getOrder(@PathVariable Long orderId) {
+    public OrderResponseDTO getOrder(@PathVariable Long orderId) {
         return service.getOrder(orderId);
     }
 }

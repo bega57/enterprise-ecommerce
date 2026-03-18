@@ -1,6 +1,6 @@
 package at.fhv.ecommerce.infrastructure.client;
 
-import at.fhv.ecommerce.presentation.ui.dto.OrderDTO;
+import at.fhv.ecommerce.presentation.ui.dto.OrderResponseDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,25 +14,25 @@ public class OrderClient {
         this.restTemplate = restTemplate;
     }
 
-    public OrderDTO placeOrder(Long userId) {
+    public OrderResponseDTO placeOrder(Long userId) {
         return restTemplate.postForObject(
                 BASE_URL + "/" + userId,
                 null,
-                OrderDTO.class
+                OrderResponseDTO.class
         );
     }
 
-    public OrderDTO[] getOrdersByUser(Long userId) {
+    public OrderResponseDTO[] getOrdersByUser(Long userId) {
         return restTemplate.getForObject(
                 BASE_URL + "/user/" + userId,
-                OrderDTO[].class
+                OrderResponseDTO[].class
         );
     }
 
-    public OrderDTO getOrderById(Long orderId) {
+    public OrderResponseDTO getOrderById(Long orderId) {
         return restTemplate.getForObject(
                 BASE_URL + "/" + orderId,
-                OrderDTO.class
+                OrderResponseDTO.class
         );
     }
 }
