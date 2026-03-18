@@ -1,11 +1,17 @@
-# E-Commerce Application
+# E-Commerce Microservices Application
 
 ## Description
 
-This project implements a simple e-commerce backend using Java and Spring Boot.
-Users can browse products, add them to a shopping cart, and place orders.
+This project implements a simple e-commerce backend using Java and Spring Boot based on a **microservice architecture**.
 
-The system manages users, products, carts, and orders and stores data in an in-memory H2 database.
+The system is divided into multiple independent services:
+
+* User Service
+* Product Service
+* Order Service (including Cart functionality)
+* Gateway Service
+
+Users interact only with the Gateway, which communicates with the other services via REST APIs.
 
 ## Features
 
@@ -16,36 +22,53 @@ The system manages users, products, carts, and orders and stores data in an in-m
 * Stock availability check when placing orders
 * View order history and order details
 
+## Architecture
+
+Each microservice:
+
+* runs on its own port
+* has its own database (H2)
+* communicates via REST APIs
+
+### Services & Ports
+
+* Gateway Service → 8080
+* User Service → 8081
+* Product Service → 8082
+* Order Service → 8083
+
 ## Technologies
 
 * Java
 * Spring Boot
 * Spring Data JPA
 * H2 Database
+* REST (RestTemplate)
 * Swagger / OpenAPI
 
 ## Running the Application
 
-Start the application with:
+Start each service individually (e.g. via IDE or):
 
 mvn spring-boot:run
 
-or run the main Spring Boot application class in your IDE.
+Then open:
+
+http://localhost:8080/swagger-ui/index.html
 
 ## API Documentation
 
-Swagger UI is available at:
+Swagger UI is available via the Gateway:
 
 http://localhost:8080/swagger-ui/index.html
 
 ## Database
 
-The application uses an in-memory H2 database for testing.
+Each microservice uses its own in-memory H2 database.
 
-H2 console (optional):
-
-http://localhost:8080/h2-console
+## Repository
+https://github.com/bega57/enterprise-ecommerce
 
 ## Notes
 
-This application is a simplified e-commerce system created as part of a university exercise.
+This application was developed as part of a university exercise to demonstrate microservice architecture, inter-service communication, and basic domain-driven design principles.
