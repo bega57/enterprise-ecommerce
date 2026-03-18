@@ -8,6 +8,8 @@ import at.fhv.orderservice.infrastructure.client.ProductClient;
 import at.fhv.orderservice.infrastructure.client.UserClient;
 import at.fhv.orderservice.infrastructure.persistence.cart.CartRepository;
 import at.fhv.orderservice.infrastructure.persistence.order.OrderRepository;
+import at.fhv.orderservice.presentation.ui.dto.OrderItemDTO;
+import at.fhv.orderservice.presentation.ui.dto.OrderResponseDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ public class OrderService {
         this.userClient = userClient;
     }
 
-    public Order placeOrder(Long userId) {
+    public OrderResponseDTO placeOrder(Long userId) {
 
         userClient.getUser(userId);
 
@@ -58,14 +60,40 @@ public class OrderService {
 
         cart.getItems().clear();
 
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+        return mapToDTO(savedOrder);
     }
 
-    public List<Order> getOrdersByUser(Long userId) {
-        return orderRepository.findByUserId(userId);
+    public List<OrderResponseDTO> getOrdersByUser(Long userId) {
+        return orderRepository.findByUserId(userId)
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
     }
 
-    public Order getOrder(Long orderId) {
-        return orderRepository.findById(orderId).orElseThrow();
+    public OrderResponseDTO getOrder(Long orderId) {
+        return mapToDTO(orderRepository.findById(orderId).orElseThrow());
+    }
+
+    private OrderResponseDTO mapToDTO(Order order) {
+
+        OrderResponseDTO dto = new OrderResponseDTO();
+        dto.setId(order.getId());
+        dto.setUserId(order.getUserId());
+
+        List<OrderItemDTO> items = order.getItems().stream().map(item -> {
+            OrderItemDTO itemDTO = new OrderItemDTO();
+            itemDTO.setProductId(item.getProductId());
+            itemDTO.setQuantity(item.getQuantity());
+
+            var product = productClient.getProduct(item.getProductId());
+            itemDTO.setProductName(product.getName());
+
+            return itemDTO;
+        }).toList();
+
+        dto.setItems(items);
+
+        return dto;
     }
 }

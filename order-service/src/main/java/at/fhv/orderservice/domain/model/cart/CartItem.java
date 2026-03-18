@@ -14,6 +14,8 @@ public class CartItem {
 
     private Long productId;
 
+    private String productName;
+
     @Min(1)
     private int quantity;
 
@@ -27,6 +29,14 @@ public class CartItem {
 
     public void setProductId(Long productId) {
         this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public int getQuantity() {

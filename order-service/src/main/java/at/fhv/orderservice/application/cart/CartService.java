@@ -29,13 +29,14 @@ public class CartService {
     public Cart addProduct(Long userId, Long productId, int quantity){
 
         userClient.getUser(userId);
-        productClient.getProduct(productId);
+        var product = productClient.getProduct(productId);
 
         Cart cart = getCartByUser(userId);
 
         CartItem item = new CartItem();
         item.setProductId(productId);
         item.setQuantity(quantity);
+        item.setProductName(product.getName());
 
         cart.getItems().add(item);
 
