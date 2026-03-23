@@ -15,6 +15,7 @@ public class OrderMapper {
         OrderResponseDTO dto = new OrderResponseDTO();
         dto.setId(order.getId());
         dto.setUserId(order.getUserId());
+        dto.setStatus(order.getStatus());
 
         List<OrderItemDTO> items = order.getItems()
                 .stream()

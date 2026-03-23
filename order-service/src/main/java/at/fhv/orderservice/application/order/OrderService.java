@@ -1,5 +1,6 @@
 package at.fhv.orderservice.application.order;
 
+import at.fhv.orderservice.application.event.OrderCreatedEvent;
 import at.fhv.orderservice.domain.model.cart.Cart;
 import at.fhv.orderservice.domain.model.cart.CartItem;
 import at.fhv.orderservice.domain.model.order.Order;
@@ -11,8 +12,11 @@ import at.fhv.orderservice.infrastructure.persistence.order.OrderRepository;
 import at.fhv.orderservice.presentation.ui.dto.OrderItemDTO;
 import at.fhv.orderservice.presentation.ui.dto.OrderResponseDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.cloud.stream.function.StreamBridge;
+
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -22,15 +26,19 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductClient productClient;
     private final UserClient userClient;
+    private final StreamBridge streamBridge;
 
     public OrderService(CartRepository cartRepository,
                         OrderRepository orderRepository,
                         ProductClient productClient,
-                        UserClient userClient) {
+                        UserClient userClient,
+                        StreamBridge streamBridge) {
+
         this.cartRepository = cartRepository;
         this.orderRepository = orderRepository;
         this.productClient = productClient;
         this.userClient = userClient;
+        this.streamBridge = streamBridge;
     }
 
     public OrderResponseDTO placeOrder(Long userId) {
@@ -42,14 +50,9 @@ public class OrderService {
         Order order = new Order();
         order.setUserId(userId);
         order.setItems(new ArrayList<>());
+        order.setStatus("PENDING");
 
         for (CartItem cartItem : cart.getItems()) {
-
-            var product = productClient.getProduct(cartItem.getProductId());
-
-            if (product.getStock() < cartItem.getQuantity()) {
-                throw new RuntimeException("Not enough stock");
-            }
 
             OrderItem item = new OrderItem();
             item.setProductId(cartItem.getProductId());
@@ -61,6 +64,17 @@ public class OrderService {
         cart.getItems().clear();
 
         Order savedOrder = orderRepository.save(order);
+
+        OrderCreatedEvent event = new OrderCreatedEvent();
+        event.orderId = savedOrder.getId();
+        event.products = new HashMap<>();
+
+        for (OrderItem item : savedOrder.getItems()) {
+            event.products.put(item.getProductId(), item.getQuantity());
+        }
+
+        streamBridge.send("orderCreated-out-0", event);
+
         return mapToDTO(savedOrder);
     }
 
@@ -80,6 +94,7 @@ public class OrderService {
         OrderResponseDTO dto = new OrderResponseDTO();
         dto.setId(order.getId());
         dto.setUserId(order.getUserId());
+        dto.setStatus(order.getStatus());
 
         List<OrderItemDTO> items = order.getItems().stream().map(item -> {
             OrderItemDTO itemDTO = new OrderItemDTO();

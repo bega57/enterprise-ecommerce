@@ -7,6 +7,7 @@ public class OrderResponseDTO {
     private Long id;
     private Long userId;
     private List<OrderItemDTO> items;
+    private String status;
 
     public Long getId() {
         return id;
@@ -20,6 +21,10 @@ public class OrderResponseDTO {
         return items;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -30,5 +35,9 @@ public class OrderResponseDTO {
 
     public void setItems(List<OrderItemDTO> items) {
         this.items = items;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
