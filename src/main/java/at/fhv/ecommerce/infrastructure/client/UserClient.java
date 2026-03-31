@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 public class UserClient {
 
     private final RestTemplate restTemplate;
-    private final String BASE_URL = "http://localhost:8081/users";
+    private final String BASE_URL = "http://user-service/users";
 
     public UserClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;

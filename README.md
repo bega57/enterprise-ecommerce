@@ -13,7 +13,7 @@ The system is divided into multiple independent services:
 
 Users interact only with the Gateway, which routes requests to the appropriate services.
 
-In addition to synchronous REST communication, the system uses **asynchronous messaging with Spring Cloud Stream** to enable event-driven workflows.
+The Gateway uses **service discovery** to dynamically locate microservices via Eureka instead of relying on hardcoded URLs.
 
 ---
 
@@ -38,6 +38,56 @@ Each microservice:
 * has its own database (H2)
 * is independently deployable
 * communicates via REST and asynchronous messaging
+
+---
+
+## Service Discovery (Eureka)
+
+The system uses **Spring Cloud Netflix Eureka** for service discovery.
+
+A dedicated **Discovery Service** acts as a Eureka Server where all microservices register themselves at runtime.
+
+### Benefits:
+
+* No hardcoded service URLs
+* Dynamic service registration
+* Improved scalability and flexibility
+
+Each service registers with Eureka using its `spring.application.name` and can discover other services by name.
+
+Example:
+
+Instead of calling:
+
+http://localhost:8082/products
+
+Services now use:
+
+http://product-service/products
+
+---
+
+## API Gateway & Composition
+
+The Gateway Service acts as a single entry point for all client requests.
+
+It forwards incoming requests to the appropriate microservices using **service discovery**.
+
+Additionally, the Gateway provides a **composition API**, which aggregates data from multiple services.
+
+### Example Composition Endpoint:
+
+GET /api/aggregate/orders/{id}
+
+This endpoint:
+
+1. Retrieves an order from the Order Service
+2. Fetches the corresponding product(s) from the Product Service
+3. Combines the results into a single response
+
+This reduces the number of client calls and centralizes data aggregation in the Gateway.
+
+---
 
 ### Services & Ports
 
@@ -104,6 +154,8 @@ This demonstrates correct saga behavior and proper handling of distributed trans
 * REST (RestTemplate)
 * Swagger / OpenAPI
 * RabbitMQ
+* Spring Cloud Netflix Eureka
+* Spring Cloud LoadBalancer
 
 ---
 
@@ -114,10 +166,21 @@ Start each service individually (e.g. via IDE or):
 mvn spring-boot:run
 
 
+### Start Order
+
+1. Start Discovery Service (Eureka Server)
+2. Start all microservices:
+   * User Service
+   * Product Service
+   * Order Service
+   * Gateway Service
+3. (Optional) Start RabbitMQ for asynchronous messaging
+
 Then open:
 
+http://localhost:8761 (Eureka Dashboard)
 
-http://localhost:8080/swagger-ui/index.html
+http://localhost:8080/swagger-ui/index.html (API Gateway)
 
 
 ---
@@ -153,3 +216,5 @@ This application was developed as part of a university exercise to demonstrate:
 * Event-driven design
 * Saga pattern (choreography)
 * Basic domain-driven design principles
+* Service discovery using Eureka
+* API Gateway with request routing and composition

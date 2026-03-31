@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 public class CartClient {
 
     private final RestTemplate restTemplate;
-    private final String BASE_URL = "http://localhost:8083/carts";
+    private final String BASE_URL = "http://order-service/carts";
 
     public CartClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
