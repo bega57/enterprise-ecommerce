@@ -13,6 +13,9 @@ import at.fhv.orderservice.presentation.ui.dto.OrderItemDTO;
 import at.fhv.orderservice.presentation.ui.dto.OrderResponseDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.cloud.stream.function.StreamBridge;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Timer;
+import io.micrometer.core.instrument.MeterRegistry;
 
 
 import java.util.ArrayList;
@@ -27,55 +30,71 @@ public class OrderService {
     private final ProductClient productClient;
     private final UserClient userClient;
     private final StreamBridge streamBridge;
+    private final Counter orderCreatedCounter;
+    private final Timer orderCreationTimer;
 
     public OrderService(CartRepository cartRepository,
                         OrderRepository orderRepository,
                         ProductClient productClient,
                         UserClient userClient,
-                        StreamBridge streamBridge) {
+                        StreamBridge streamBridge, MeterRegistry meterRegistry) {
 
         this.cartRepository = cartRepository;
         this.orderRepository = orderRepository;
         this.productClient = productClient;
         this.userClient = userClient;
         this.streamBridge = streamBridge;
+
+        this.orderCreatedCounter = meterRegistry.counter("orders.created");
+        this.orderCreationTimer = meterRegistry.timer("orders.creation.time");
     }
 
     public OrderResponseDTO placeOrder(Long userId) {
 
-        userClient.getUser(userId);
+        return orderCreationTimer.record(() -> {
 
-        Cart cart = cartRepository.findByUserId(userId).orElseThrow();
+            userClient.getUser(userId);
 
-        Order order = new Order();
-        order.setUserId(userId);
-        order.setItems(new ArrayList<>());
-        order.setStatus("PENDING");
+            Cart cart = cartRepository.findByUserId(userId).orElseThrow();
 
-        for (CartItem cartItem : cart.getItems()) {
+            Order order = new Order();
+            order.setUserId(userId);
+            order.setItems(new ArrayList<>());
+            order.setStatus("PENDING");
 
-            OrderItem item = new OrderItem();
-            item.setProductId(cartItem.getProductId());
-            item.setQuantity(cartItem.getQuantity());
+            for (CartItem cartItem : cart.getItems()) {
 
-            order.getItems().add(item);
-        }
+                OrderItem item = new OrderItem();
+                item.setProductId(cartItem.getProductId());
+                item.setQuantity(cartItem.getQuantity());
 
-        cart.getItems().clear();
+                order.getItems().add(item);
+            }
 
-        Order savedOrder = orderRepository.save(order);
+            cart.getItems().clear();
 
-        OrderCreatedEvent event = new OrderCreatedEvent();
-        event.orderId = savedOrder.getId();
-        event.products = new HashMap<>();
+            Order savedOrder = orderRepository.save(order);
 
-        for (OrderItem item : savedOrder.getItems()) {
-            event.products.put(item.getProductId(), item.getQuantity());
-        }
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
 
-        streamBridge.send("orderCreated-out-0", event);
+            orderCreatedCounter.increment();
 
-        return mapToDTO(savedOrder);
+            OrderCreatedEvent event = new OrderCreatedEvent();
+            event.orderId = savedOrder.getId();
+            event.products = new HashMap<>();
+
+            for (OrderItem item : savedOrder.getItems()) {
+                event.products.put(item.getProductId(), item.getQuantity());
+            }
+
+            streamBridge.send("orderCreated-out-0", event);
+
+            return mapToDTO(savedOrder);
+        });
     }
 
     public List<OrderResponseDTO> getOrdersByUser(Long userId) {

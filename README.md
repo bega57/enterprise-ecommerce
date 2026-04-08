@@ -182,6 +182,85 @@ http://localhost:8761 (Eureka Dashboard)
 
 http://localhost:8080/swagger-ui/index.html (API Gateway)
 
+---
+
+## Observability (Metrics)
+
+To monitor the system behavior, observability has been added using **Spring Boot Actuator** and **Micrometer**.
+
+Each service exposes metrics via:
+
+http://localhost:{port}/actuator/prometheus
+
+### Implemented Metrics
+
+Custom domain-specific metrics were added to monitor business logic:
+
+**Order Service:**
+* `orders_created_total` – counts created orders
+* `orders_creation_time` – measures order processing duration
+
+**Product Service:**
+* `products_created_total` – counts created products
+* `products_stock_updated_total` – tracks stock updates
+
+---
+
+## Metrics Collection (Prometheus)
+
+Metrics are collected using **Prometheus**, which periodically scrapes data from all services.
+
+Prometheus runs on:
+
+http://localhost:9090
+
+It is configured to collect metrics from:
+
+* Product Service (8082)
+* Order Service (8083)
+
+---
+
+## Visualization (Grafana)
+
+Metrics are visualized using **Grafana dashboards**.
+
+Grafana runs on:
+
+http://localhost:3000
+
+### Dashboard Panels
+
+The following panels were created:
+
+* Orders Created
+* Products Created
+* Response Time (HTTP requests)
+
+These dashboards provide real-time insight into system behavior.
+
+---
+
+## Failure Simulation & Detection
+
+To demonstrate observability, an artificial delay was introduced in the Order Service using:
+
+Thread.sleep(3000);
+
+This simulates a slow response in the system.
+
+### Observed Behavior:
+
+Using Grafana, the following effects were visible:
+
+* Increased response time in HTTP request metrics
+* Noticeable spikes in the response time graph
+* Slower processing of requests
+
+### Conclusion:
+
+The observability setup successfully detected the performance issue.  
+This demonstrates how metrics can be used to identify and analyze system problems in real time.
 
 ---
 

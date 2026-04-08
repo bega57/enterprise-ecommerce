@@ -3,6 +3,8 @@ package at.fhv.productservice.application.product;
 import org.springframework.stereotype.Service;
 import at.fhv.productservice.domain.model.product.Product;
 import at.fhv.productservice.infrastructure.persistence.product.ProductRepository;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 
 import java.util.List;
 
@@ -10,9 +12,13 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository repository;
+    private final Counter productCreatedCounter;
+    private final Counter stockUpdateCounter;
 
-    public ProductService(ProductRepository repository) {
+    public ProductService(ProductRepository repository, MeterRegistry registry) {
         this.repository = repository;
+        this.productCreatedCounter = registry.counter("products.created");
+        this.stockUpdateCounter = registry.counter("products.stock.updated");
     }
 
     public List<Product> getAllProducts() {
@@ -20,6 +26,7 @@ public class ProductService {
     }
 
     public Product createProduct(Product product) {
+        productCreatedCounter.increment();
         return repository.save(product);
     }
 
@@ -32,6 +39,7 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, Product product) {
+        stockUpdateCounter.increment();
 
         Product existing = repository.findById(id).orElseThrow();
 
